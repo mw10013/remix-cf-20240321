@@ -4,6 +4,9 @@ import {
   type LoaderFunctionArgs,
 } from "@remix-run/cloudflare";
 import { Form, useLoaderData } from "@remix-run/react";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 const key = "__my-key__";
 
@@ -34,23 +37,23 @@ export async function action({ request, context }: ActionFunctionArgs) {
 export default function Index() {
   const { value } = useLoaderData<typeof loader>();
   return (
-    <div className="container mx-auto flex flex-col items-center justify-center py-6">
+    <div className="container mx-auto flex flex-col items-center justify-center gap-2 py-6">
       <h1 className="text-lg font-semibold">Welcome to Remix</h1>
       {value ? (
         <>
           <p>Value: {value}</p>
           <Form method="DELETE">
-            <button>Delete</button>
+            <Button>Delete</Button>
           </Form>
         </>
       ) : (
         <>
           <p>No value</p>
-          <Form method="POST">
-            <label htmlFor="value">Set value: </label>
-            <input type="text" name="value" id="value" required />
+          <Form method="POST" className="flex flex-col gap-2">
+            <Label htmlFor="value">Set value: </Label>
+            <Input type="text" name="value" id="value" required />
             <br />
-            <button>Save</button>
+            <Button>Save</Button>
           </Form>
         </>
       )}
