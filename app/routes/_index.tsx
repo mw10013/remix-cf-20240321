@@ -1,7 +1,7 @@
 import {
   json,
-  type LoaderFunctionArgs,
   type ActionFunctionArgs,
+  type LoaderFunctionArgs,
 } from "@remix-run/cloudflare";
 import { Form, useLoaderData } from "@remix-run/react";
 
@@ -34,8 +34,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 export default function Index() {
   const { value } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Welcome to Remix</h1>
+    <div className="container mx-auto flex flex-col items-center justify-center py-6">
+      <h1 className="text-lg font-semibold">Welcome to Remix</h1>
       {value ? (
         <>
           <p>Value: {value}</p>
