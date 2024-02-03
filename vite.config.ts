@@ -11,6 +11,7 @@ export default defineConfig({
     nodePolyfills({
       globals: {
         // Buffer: true,
+        // global: true,
       }
     }),
     remix({

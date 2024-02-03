@@ -7,8 +7,10 @@ import * as crypto from "crypto";
 
 export function generateSecret() {
   global.Buffer = Buffer;
-  // return base32.encode(crypto.randomBytes(10)).toString() as string;
+  // console.log("randomBytes:", crypto.randomBytes(10));
   return base32.encode("abacab").toString() as string;
+  // return base32.encode(crypto.randomBytes(10)).toString() as string;
+  // return "abacab";
 }
 
 export async function loader({ context }: LoaderFunctionArgs) {
