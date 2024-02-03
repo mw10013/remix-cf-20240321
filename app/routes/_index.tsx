@@ -52,7 +52,6 @@ export default function Index() {
           <Form method="POST" className="flex flex-col gap-2">
             <Label htmlFor="value">Set value: </Label>
             <Input type="text" name="value" id="value" required />
-            <br />
             <Button>Save</Button>
           </Form>
         </>

@@ -47,6 +47,11 @@ module.exports = {
           typescript: {},
         },
       },
+      rules: {
+        "react/prop-types": "off",
+        // "react/no-unescaped-entities": "off",
+        "jsx-a11y/heading-has-content": "off",
+      },
     },
 
     // Typescript
@@ -65,6 +70,10 @@ module.exports = {
           },
         },
       },
+      rules: {
+        // '@typescript-eslint/no-explicit-any': 'warn',
+        // '@typescript-eslint/no-namespace': 'off',
+      },
       extends: [
         "plugin:@typescript-eslint/recommended",
         "plugin:import/recommended",
@@ -74,7 +83,7 @@ module.exports = {
 
     // Node
     {
-      files: [".eslintrc.js"],
+      files: [".eslintrc.cjs"],
       env: {
         node: true,
       },
