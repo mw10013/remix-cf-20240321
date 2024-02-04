@@ -8,7 +8,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   resolve: {
     alias: {
-      buffer: 'node:buffer',
       crypto: 'node:crypto',
     }
   },
