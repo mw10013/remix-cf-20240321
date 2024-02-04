@@ -1,6 +1,7 @@
 import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { setUpGlobals } from "~/.server/globals";
+import { verifyTOTP } from "@epic-web/totp";
 
 // @ts-expect-error - `thirty-two` is not typed.
 import * as base32 from "thirty-two";
@@ -12,7 +13,10 @@ export function generateSecret() {
 
 export async function loader({ context }: LoaderFunctionArgs) {
   setUpGlobals();
-  return { secret: generateSecret() };
+  return {
+    secret: generateSecret(),
+    verifyTOTP: verifyTOTP({ otp: "otp", secret: "secret" }),
+  };
 }
 
 export default function Index() {

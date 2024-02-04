@@ -8,8 +8,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   resolve: {
     alias: {
-      crypto: 'node:crypto',
-    }
+      // crypto: "crypto-browserify",
+      crypto: "node:crypto",
+    },
   },
   plugins: [
     remix({
@@ -18,6 +19,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   ssr: {
+    noExternal: ["@epic-web/totp"],
     resolve: {
       externalConditions: ["workerd", "worker"],
     },
