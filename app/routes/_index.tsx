@@ -1,19 +1,19 @@
 import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { Form, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+// import * as Buffer from "node:buffer";
+import { setUpGlobals } from "~/.server/polyfill";
 
 // @ts-expect-error - `thirty-two` is not typed.
 import * as base32 from "thirty-two";
 import * as crypto from "crypto";
 
 export function generateSecret() {
-  global.Buffer = Buffer;
-  // console.log("randomBytes:", crypto.randomBytes(10));
-  return base32.encode("abacab").toString() as string;
-  // return base32.encode(crypto.randomBytes(10)).toString() as string;
-  // return "abacab";
+  // return base32.encode("abacab").toString() as string;
+  return base32.encode(crypto.randomBytes(10)).toString() as string;
 }
 
 export async function loader({ context }: LoaderFunctionArgs) {
+  setUpGlobals();
   return { secret: generateSecret() };
 }
 

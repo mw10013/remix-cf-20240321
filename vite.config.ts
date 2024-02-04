@@ -3,17 +3,16 @@ import {
   unstable_cloudflarePreset as cloudflare,
 } from "@remix-run/dev";
 import { defineConfig } from "vite";
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      buffer: 'node:buffer',
+      crypto: 'node:crypto',
+    }
+  },
   plugins: [
-    nodePolyfills({
-      globals: {
-        // Buffer: true,
-        // global: true,
-      }
-    }),
     remix({
       presets: [cloudflare()],
     }),
