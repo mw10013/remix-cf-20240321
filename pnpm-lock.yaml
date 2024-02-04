@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@epic-web/totp':
+    specifier: ^1.1.1
+    version: 1.1.1
   '@remix-run/cloudflare':
     specifier: ^2.6.0
     version: 2.6.0(@cloudflare/workers-types@4.20240129.0)(typescript@5.3.3)
@@ -492,6 +495,13 @@ packages:
   /@emotion/hash@0.9.1:
     resolution: {integrity: sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==}
     dev: true
+
+  /@epic-web/totp@1.1.1:
+    resolution: {integrity: sha512-7FIStgheUm6EuOp5DDTrID5K5G3TzCNRaNvUYi7MBjdHW5gappPrg41IId95Q1fWN9S85R1P7Uoi2CSG7X7n1Q==}
+    engines: {node: '>=18'}
+    dependencies:
+      thirty-two: 1.0.2
+    dev: false
 
   /@esbuild-plugins/node-globals-polyfill@0.2.3(esbuild@0.17.19):
     resolution: {integrity: sha512-r3MIryXDeXDOZh7ih1l/yE9ZLORCd5e8vWg02azWRGj5SPTuoh69A2AIyn0Z31V/kHBfZ4HgWJ+OK3GTTwLmnw==}
