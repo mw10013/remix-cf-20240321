@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@epic-web/totp':
-    specifier: github:mw10013/totp#node-import
-    version: github.com/mw10013/totp/bd3dc029738b0bd29d4d1b4116d79e8b438f52b0
+    specifier: github:mw10013/totp#types
+    version: github.com/mw10013/totp/41e93fac450611ceb4d20113aa3ec70a24b2beff
   '@remix-run/cloudflare':
     specifier: ^2.6.0
     version: 2.6.0(@cloudflare/workers-types@4.20240129.0)(typescript@5.3.3)
@@ -6739,8 +6739,8 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
 
-  github.com/mw10013/totp/bd3dc029738b0bd29d4d1b4116d79e8b438f52b0:
-    resolution: {tarball: https://codeload.github.com/mw10013/totp/tar.gz/bd3dc029738b0bd29d4d1b4116d79e8b438f52b0}
+  github.com/mw10013/totp/41e93fac450611ceb4d20113aa3ec70a24b2beff:
+    resolution: {tarball: https://codeload.github.com/mw10013/totp/tar.gz/41e93fac450611ceb4d20113aa3ec70a24b2beff}
     name: '@epic-web/totp'
     version: 0.0.0-semantically-released
     engines: {node: '>=18'}
