@@ -6,12 +6,6 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      // crypto: "crypto-browserify",
-      // crypto: "node:crypto",
-    },
-  },
   plugins: [
     remix({
       presets: [cloudflare()],
@@ -19,8 +13,6 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   ssr: {
-    // noExternal: ["@epic-web/totp"],
-    // noExternal: ["remix-auth-totp"],
     resolve: {
       externalConditions: ["workerd", "worker"],
     },

@@ -2,15 +2,7 @@ import { type LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { setUpGlobals } from "~/.server/globals";
 import { generateTOTP, verifyTOTP } from "@epic-web/totp";
-
-// @ts-expect-error - `thirty-two` is not typed.
-import * as base32 from "thirty-two";
-// import * as crypto from "crypto";
 import { TOTPStrategy } from "remix-auth-totp";
-
-// export function generateSecret() {
-//   return base32.encode(crypto.randomBytes(10)).toString() as string;
-// }
 
 export async function loader({ context }: LoaderFunctionArgs) {
   setUpGlobals();
@@ -30,8 +22,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
         id: "user-id-1";
       }
     ),
-    // secret: generateSecret(),
-    // verifyTOTP: verifyTOTP({ otp: "otp", secret: "secret" }),
   };
 }
 
