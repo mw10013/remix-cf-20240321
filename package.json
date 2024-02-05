@@ -12,7 +12,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@epic-web/totp": "^1.1.1",
+    "@epic-web/totp": "github:mw10013/totp#node-import",
     "@remix-run/cloudflare": "^2.6.0",
     "@remix-run/cloudflare-pages": "^2.6.0",
     "@remix-run/react": "^2.6.0",
@@ -20,6 +20,7 @@
     "miniflare": "^3.20231030.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "remix-auth-totp": "file:../remix-auth-totp",
     "thirty-two": "^1.0.2"
   },
   "devDependencies": {

@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // crypto: "crypto-browserify",
-      crypto: "node:crypto",
+      // crypto: "node:crypto",
     },
   },
   plugins: [
@@ -19,7 +19,8 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   ssr: {
-    noExternal: ["@epic-web/totp"],
+    // noExternal: ["@epic-web/totp"],
+    // noExternal: ["remix-auth-totp"],
     resolve: {
       externalConditions: ["workerd", "worker"],
     },
