@@ -7,7 +7,7 @@ node_modules
 
 # Cloudflare
 .wrangler
-# wrangler.toml
+wrangler.toml
 
 # Playwright
 /test-results
