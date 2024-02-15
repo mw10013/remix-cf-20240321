@@ -10,7 +10,25 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "wrangler pages dev ./build/client --compatibility-date=2024-02-03 --compatibility-flags=nodejs_compat",
     "typecheck": "tsc",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "tail:prod": "wrangler pages deployment tail --project-name remix-cf --environment production",
+    "tail:preview": "wrangler pages deployment tail --project-name remix-cf --environment preview",
+    "tail:deploy": "wrangler pages deployment tail --project-name remix-cf",
+    "tunnel": "cloudflared tunnel --url http://localhost:8788",
+    "drizzle:generate": "drizzle-kit generate:sqlite",
+    "drizzle:up": "drizzle-kit up:sqlite",
+    "drizzle:check": "drizzle-kit check:sqlite",
+    "drizzle:drop": "drizzle-kit drop",
+    "d1:migrate:list": "wrangler d1 migrations list rcf-d1-dev --local",
+    "d1:migrate:apply": "wrangler d1 migrations apply rcf-d1-dev --local",
+    "d1:migrate:list:preview": "wrangler d1 migrations list rcf-d1-preview --env preview",
+    "d1:migrate:apply:preview": "wrangler d1 migrations apply rcf-d1-preview --env preview",
+    "d1:migrate:list:prod": "wrangler d1 migrations list rcf-d1-prod --env prod",
+    "d1:migrate:apply:prod": "wrangler d1 migrations apply rcf-d1-prod --env prod",
+    "d1:reset": "tsx scripts/d1-reset.ts",
+    "d1:push": "tsx scripts/d1-push.ts",
+    "script": "tsx --env-file=.dev.vars"
+
   },
   "dependencies": {
     "@conform-to/react": "^1.0.1",
@@ -48,6 +66,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",
+    "@faker-js/faker": "^8.4.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@remix-run/dev": "^2.6.0",
     "@types/react": "^18.2.20",
@@ -64,6 +83,7 @@
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
+    "remix-flat-routes": "^0.6.4",
     "shadcn-ui": "^0.8.0",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.7.1",

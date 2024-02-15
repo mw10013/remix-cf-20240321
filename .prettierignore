@@ -1,11 +1,18 @@
 node_modules
 pnpm-lock.yaml
-
-/.cache
-/build
 .env
 
+# Remix
+/.cache
+/build
+
+# Cloudflare
 .wrangler
 
-vite.config.ts.timestamp*
+# Playwright
+/test-results
+/playwright-report
+
+# Remix stacks
+/package-lock.json
 
