@@ -1,36 +1,16 @@
 import { Buffer } from "node:buffer";
-import {
-  createWorkersKVSessionStorage,
-  SessionStorage,
-} from "@remix-run/cloudflare";
-import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/d1";
+// import {
+//   createWorkersKVSessionStorage,
+//   SessionStorage,
+// } from "@remix-run/cloudflare";
+// import { eq } from "drizzle-orm";
+// import { drizzle } from "drizzle-orm/d1";
 // import { Authenticator } from "remix-auth";
 // import { TOTPStrategy } from "remix-auth-totp";
 import { z } from "zod";
 import { SessionUser, users } from "~/lib/db/schema";
 // import { sendAuthEmail } from "~/lib/email.server";
 
-export const cloudflareEnvSchema = z.object({
-  ENVIRONMENT: z.enum(["production", "preview", "develoopment"]),
-//   SESSION_SECRET: z.string().min(1),
-//   TOTP_SECRET: z.string().min(1),
-//   RESEND_API_KEY: z.string().min(1),
-  KV: z.record(z.unknown()).transform((obj) => obj as unknown as KVNamespace),
-  D1: z.record(z.unknown()).transform((obj) => obj as unknown as D1Database),
-});
-
-export type CloudflareEnv = z.infer<typeof cloudflareEnvSchema>;
-
-// export function hookEnv(env: unknown) {
-//   globalThis.Buffer = Buffer;
-
-//   function assertCloudflareEnv(obj: unknown): asserts obj is CloudflareEnv {
-//     cloudflareEnvSchema.parse(obj);
-//   }
-//   assertCloudflareEnv(env);
-//   return { env };
-// }
 export const envSchema = z.object({
     ENVIRONMENT: z.enum(["production", "preview", "develoopment"]),
   //   SESSION_SECRET: z.string().min(1),
@@ -40,7 +20,7 @@ export const envSchema = z.object({
     D1: z.record(z.unknown()).transform((obj) => obj as unknown as D1Database),
   });
   
-  export type Env = z.infer<typeof cloudflareEnvSchema>;
+  export type Env = z.infer<typeof envSchema>;
 
 export function hookEnv(env: unknown) {
   globalThis.Buffer = Buffer;
