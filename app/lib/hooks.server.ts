@@ -9,18 +9,19 @@ import { Buffer } from "node:buffer";
 // import { TOTPStrategy } from "remix-auth-totp";
 import { z } from "zod";
 import { SessionUser, users } from "~/lib/db/schema";
+
 // import { sendAuthEmail } from "~/lib/email.server";
 
 export const envSchema = z.object({
-    ENVIRONMENT: z.enum(["production", "preview", "develoopment"]),
+  ENVIRONMENT: z.enum(["production", "preview", "development"]),
   //   SESSION_SECRET: z.string().min(1),
   //   TOTP_SECRET: z.string().min(1),
   //   RESEND_API_KEY: z.string().min(1),
-    KV: z.record(z.unknown()).transform((obj) => obj as unknown as KVNamespace),
-    D1: z.record(z.unknown()).transform((obj) => obj as unknown as D1Database),
-  });
-  
-  export type Env = z.infer<typeof envSchema>;
+  KV: z.record(z.unknown()).transform((obj) => obj as unknown as KVNamespace),
+  D1: z.record(z.unknown()).transform((obj) => obj as unknown as D1Database),
+});
+
+export type Env = z.infer<typeof envSchema>;
 
 export function hookEnv(env: unknown) {
   globalThis.Buffer = Buffer;
