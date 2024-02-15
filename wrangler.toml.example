@@ -32,3 +32,5 @@ database_id = "" # pnpm wrangler d1 info rcf-d1-prod
 preview_database_id = "D1"
 migrations_table = "d1_migrations"
 migrations_dir = "drizzle"
+
+[vars]
