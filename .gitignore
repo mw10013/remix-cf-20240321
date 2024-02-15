@@ -1,5 +1,6 @@
 node_modules
 .env
+.dev.vars
 
 # Remix
 /.cache
@@ -15,3 +16,5 @@ wrangler.toml
 
 # Remix stacks
 /package-lock.json
+
+.DS_Store

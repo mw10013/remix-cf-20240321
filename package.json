@@ -28,7 +28,6 @@
     "d1:reset": "tsx scripts/d1-reset.ts",
     "d1:push": "tsx scripts/d1-push.ts",
     "script": "tsx --env-file=.dev.vars"
-
   },
   "dependencies": {
     "@conform-to/react": "^1.0.1",
@@ -73,6 +72,8 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "autoprefixer": "^10.4.17",
+    "better-sqlite3": "^9.4.1",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",

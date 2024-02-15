@@ -16,3 +16,4 @@ pnpm-lock.yaml
 # Remix stacks
 /package-lock.json
 
+.DS_Store
