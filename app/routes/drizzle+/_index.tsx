@@ -7,10 +7,22 @@ import * as schema from "~/lib/db/schema";
 import { hookEnv } from "~/lib/hooks.server";
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const { env } = hookEnv(context.env);
-  const db = drizzle(env.D1, { schema });
+  const {
+    env: { D1 },
+  } = hookEnv(context.env);
+  const db = drizzle(D1, { schema });
   const users = await db.query.users.findMany();
-  return { users };
+  const select = await db.select().from(schema.users).all();
+  console.log("select: %o", select);
+
+  const batch = await D1.batch([
+    D1.prepare("PRAGMA table_list"),
+    D1.prepare("PRAGMA table_info(users)"),
+  ]);
+
+  const stmt = D1.prepare("select * from users");
+  const all = await stmt.all();
+  return { all, batch, users, select };
 }
 
 export async function action({ context }: ActionFunctionArgs) {
@@ -21,33 +33,34 @@ export async function action({ context }: ActionFunctionArgs) {
       email: faker.internet.email(),
     })),
   );
-  //   const result = await Promise.all(
-  //     [...Array(10).keys()].map(async () => {
-  //       const avatarUrl = faker.image.avatar();
-  //       const response = await fetch(avatarUrl);
-  //       const contentType = response.headers.get("content-type") ?? "";
-  //       const bytes = await response.arrayBuffer();
-  //       const user = await prisma.user.create({
-  //         data: {
-  //           email: faker.internet.email(),
-  //           username: faker.word.noun(),
-  //           roles: { connect: [{ name: "user" }] },
-  //           image: { create: { blob: Buffer.from(bytes), contentType } },
-  //         },
-  //         include: {
-  //           image: { select: { id: true } },
-  //           roles: {
-  //             select: {
-  //               name: true,
-  //             },
-  //           },
-  //         },
-  //       });
-  //       return user;
-  //     }),
-  //   );
   return { result };
 }
+
+//   const result = await Promise.all(
+//     [...Array(10).keys()].map(async () => {
+//       const avatarUrl = faker.image.avatar();
+//       const response = await fetch(avatarUrl);
+//       const contentType = response.headers.get("content-type") ?? "";
+//       const bytes = await response.arrayBuffer();
+//       const user = await prisma.user.create({
+//         data: {
+//           email: faker.internet.email(),
+//           username: faker.word.noun(),
+//           roles: { connect: [{ name: "user" }] },
+//           image: { create: { blob: Buffer.from(bytes), contentType } },
+//         },
+//         include: {
+//           image: { select: { id: true } },
+//           roles: {
+//             select: {
+//               name: true,
+//             },
+//           },
+//         },
+//       });
+//       return user;
+//     }),
+//   );
 
 export default function Route() {
   const data = useLoaderData<typeof loader>();

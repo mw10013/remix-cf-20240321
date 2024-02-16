@@ -34,3 +34,25 @@ Make sure to deploy the output of `npm run build`
 
 - `build/server`
 - `build/client`
+
+```sh
+pnpm wrangler d1 info rcf-d1-prod
+pnpm wrangler d1 info rcf-d1-preview
+
+# dev
+pnpm wrangler d1 execute rcf-d1-dev --local --command "select * from d1_migrations;"
+pnpm wrangler d1 execute rcf-d1-dev --local --command "select * from users;"
+pnpm wrangler d1 execute rcf-d1-dev --local --command "pragma table_list"
+pnpm wrangler d1 execute rcf-d1-dev --local --command "pragma table_info(users)"
+pnpm wrangler d1 execute rcf-d1-dev --local --command "pragma foreign_keys"
+
+# prod
+pnpm wrangler d1 execute rcf-d1-prod --command "select * from d1_migrations;"
+pnpm wrangler d1 execute rcf-d1-prod --command "select * from users;"
+pnpm wrangler d1 migrations list rcf-d1-prod --env prod
+
+# preview
+pnpm wrangler d1 execute rcf-d1-preview --command "select * from d1_migrations;"
+pnpm wrangler d1 execute rcf-d1-preview --command "select * from users;"
+pnpm wrangler d1 migrations list rcf-d1-preview --env preview
+```
