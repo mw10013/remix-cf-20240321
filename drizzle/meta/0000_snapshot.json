@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "22e102ee-455b-4e64-bf5f-e5da412e659b",
+  "id": "9a234706-efb5-4825-aae9-94ec95b1bdaf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -28,6 +28,46 @@
           "notNull": true,
           "autoincrement": false,
           "default": "CURRENT_TIMESTAMP"
+        },
+        "created_at_epoch": {
+          "name": "created_at_epoch",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "created_at_mode": {
+          "name": "created_at_mode",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "created_at_int": {
+          "name": "created_at_int",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "created_at_text": {
+          "name": "created_at_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "int": {
+          "name": "int",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 7
         }
       },
       "indexes": {

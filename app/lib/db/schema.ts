@@ -8,6 +8,19 @@ export const users = sqliteTable("users", {
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+  createdAtEpoch: integer("created_at_epoch", { mode: "timestamp" })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  createdAtMode: integer("created_at_mode", { mode: "timestamp" })
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  createdAtInt: integer("created_at_int")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  createdAtText: text("created_at_text")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  int: integer("int").notNull().default(7),
 });
 
 export type User = typeof users.$inferSelect;

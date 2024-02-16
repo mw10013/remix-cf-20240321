@@ -5,6 +5,10 @@ import { $, glob } from "zx";
  * This will only work locally
  */
 
+await $`rm -rf ./.wrangler ./drizzle`;
+await $`pnpm drizzle:generate`;
+await $`wrangler d1 migrations apply rcf-d1-dev --local`;
+
 const sqliteFiles = await glob("./.wrangler/**/*.sqlite");
 console.log({ sqliteFiles });
 
@@ -13,6 +17,10 @@ if (sqliteFiles.length !== 1) {
   process.exit(1);
 }
 
-await $`sqlite3 ${sqliteFiles[0]} < scripts/reset-sqlite.sql`;
-await $`wrangler d1 migrations apply rcf-d1-dev --local`;
-await $`sqlite3 ${sqliteFiles[0]} "pragma table_list;"`;
+const statements = `
+.schema
+pragma table_list`;
+
+await $`echo ${statements} | sqlite3 ${sqliteFiles[0]}`;
+
+// await $`sqlite3 ${sqliteFiles[0]} < scripts/reset-sqlite.sql`;

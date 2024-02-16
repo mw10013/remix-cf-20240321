@@ -27,7 +27,8 @@
     "d1:migrate:apply:prod": "wrangler d1 migrations apply rcf-d1-prod --env prod",
     "d1:reset": "tsx scripts/d1-reset.ts",
     "d1:push": "tsx scripts/d1-push.ts",
-    "script": "tsx --env-file=.dev.vars"
+    "script-": "tsx --env-file=.dev.vars",
+    "script": "tsx"
   },
   "dependencies": {
     "@conform-to/react": "^1.0.1",

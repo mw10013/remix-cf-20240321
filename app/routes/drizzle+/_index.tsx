@@ -11,18 +11,21 @@ export async function loader({ context }: LoaderFunctionArgs) {
     env: { D1 },
   } = hookEnv(context.env);
   const db = drizzle(D1, { schema });
-  const users = await db.query.users.findMany();
-  const select = await db.select().from(schema.users).all();
-  console.log("select: %o", select);
-
-  const batch = await D1.batch([
-    D1.prepare("PRAGMA table_list"),
-    D1.prepare("PRAGMA table_info(users)"),
-  ]);
 
   const stmt = D1.prepare("select * from users");
   const all = await stmt.all();
-  return { all, batch, users, select };
+  const raw = await stmt.raw();
+
+  const batch = await D1.batch([
+    // D1.prepare("PRAGMA table_list"),
+    D1.prepare("PRAGMA table_info(users)"),
+  ]);
+
+  const query = await db.query.users.findMany();
+  const select = await db.select().from(schema.users).all();
+  console.log("select: %o", select);
+
+  return { all, raw, batch, query, select };
 }
 
 export async function action({ context }: ActionFunctionArgs) {
