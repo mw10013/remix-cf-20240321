@@ -25,7 +25,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const select = await db.select().from(schema.users).all();
   console.log("select: %o", select);
 
-  return { all, raw, batch, query, select };
+  return { query, select, all, raw, batch,  };
 }
 
 export async function action({ context }: ActionFunctionArgs) {
