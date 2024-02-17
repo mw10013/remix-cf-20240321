@@ -34,3 +34,5 @@ migrations_table = "d1_migrations"
 migrations_dir = "drizzle"
 
 [vars]
+ENVIRONMENT = "development"
+LMSQUEEZY_API_KEY = ""

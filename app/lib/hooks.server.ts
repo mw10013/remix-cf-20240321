@@ -14,6 +14,7 @@ import { SessionUser, users } from "~/lib/db/schema";
 
 export const envSchema = z.object({
   ENVIRONMENT: z.enum(["production", "preview", "development"]),
+  LMSQUEEZY_API_KEY: z.string().min(1),
   //   SESSION_SECRET: z.string().min(1),
   //   TOTP_SECRET: z.string().min(1),
   //   RESEND_API_KEY: z.string().min(1),
