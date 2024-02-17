@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { drizzle } from "drizzle-orm/d1";
@@ -25,15 +24,15 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const select = await db.select().from(schema.users).all();
   console.log("select: %o", select);
 
-  return { query, select, all, raw, batch,  };
+  return { query, select, all, raw, batch };
 }
 
 export async function action({ context }: ActionFunctionArgs) {
   const { env } = hookEnv(context.env);
   const db = drizzle(env.D1, { schema });
   const result = await db.insert(schema.users).values(
-    [...Array(2).keys()].map(() => ({
-      email: faker.internet.email(),
+    ["user1@user.com", "user2@user.com", "user3@user.com"].map((email) => ({
+      email,
     })),
   );
   return { result };
