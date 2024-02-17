@@ -20,4 +20,4 @@ wrangler.toml
 .DS_Store
 
 # Drizzle
-drizzle
+# ./drizzle

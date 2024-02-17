@@ -1,7 +1,7 @@
 import { $, glob } from "zx";
 
 /**
- * Reset the local d1 database in .wrangler and apply migrations.
+ * Reset the local d1 database violently.
  * This will only work locally
  */
 
@@ -22,5 +22,7 @@ const statements = `
 pragma table_list`;
 
 await $`echo ${statements} | sqlite3 ${sqliteFiles[0]}`;
+
+console.log(`sqlite3 ${sqliteFiles[0]}`);
 
 // await $`sqlite3 ${sqliteFiles[0]} < scripts/reset-sqlite.sql`;

@@ -10,7 +10,7 @@ export const users = sqliteTable("users", {
     .default(sql`CURRENT_TIMESTAMP`),
   createdAtEpoch: integer("created_at_epoch", { mode: "timestamp" })
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`unixepoch()`),
   createdAtMode: integer("created_at_mode", { mode: "timestamp" })
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),

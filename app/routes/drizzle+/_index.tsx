@@ -32,7 +32,7 @@ export async function action({ context }: ActionFunctionArgs) {
   const { env } = hookEnv(context.env);
   const db = drizzle(env.D1, { schema });
   const result = await db.insert(schema.users).values(
-    [...Array(5).keys()].map(() => ({
+    [...Array(2).keys()].map(() => ({
       email: faker.internet.email(),
     })),
   );
