@@ -1,61 +1,87 @@
-import {
-  json,
-  type ActionFunctionArgs,
-  type LoaderFunctionArgs,
-} from "@remix-run/cloudflare";
-import { Form, useLoaderData } from "@remix-run/react";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+import { MetaFunction } from "@remix-run/cloudflare";
+import { Link } from "@remix-run/react";
+import { Egg } from "lucide-react";
+import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
-const key = "__my-key__";
-
-export async function loader({ context }: LoaderFunctionArgs) {
-  const { KV } = context.env;
-  const value = await KV.get(key);
-  return json({ value });
-}
-
-export async function action({ request, context }: ActionFunctionArgs) {
-  const { KV: myKv } = context.env;
-
-  if (request.method === "POST") {
-    const formData = await request.formData();
-    const value = formData.get("value") as string;
-    await myKv.put(key, value);
-    return null;
-  }
-
-  if (request.method === "DELETE") {
-    await myKv.delete(key);
-    return null;
-  }
-
-  throw new Error(`Method not supported: "${request.method}"`);
-}
+export const meta: MetaFunction = () => {
+  return [
+    { title: "New Remix App" },
+    { name: "description", content: "Welcome to Remix!" },
+  ];
+};
 
 export default function Index() {
-  const { value } = useLoaderData<typeof loader>();
   return (
-    <div className="container mx-auto flex flex-col items-center justify-center gap-2 py-6">
-      <h1 className="text-lg font-semibold">Welcome to Remix</h1>
-      {value ? (
-        <>
-          <p>Value: {value}</p>
-          <Form method="DELETE">
-            <Button>Delete</Button>
-          </Form>
-        </>
-      ) : (
-        <>
-          <p>No value</p>
-          <Form method="POST" className="flex flex-col gap-2">
-            <Label htmlFor="value">Set value: </Label>
-            <Input type="text" name="value" id="value" required />
-            <Button>Save</Button>
-          </Form>
-        </>
-      )}
+    <div className="relative font-sans leading-relaxed">
+      <nav className="sticky top-0 z-50 flex w-full bg-card/80 px-6 backdrop-blur-md dark:bg-black/80">
+        <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between py-3">
+          <div className="flex items-center gap-6">
+            <Link
+              to="/"
+              prefetch="intent"
+              className="flex h-10 items-center gap-1"
+            >
+              <Egg className="h-10 w-10 stroke-[1.5px] text-primary" />
+              <p className="text-lg font-bold">App</p>
+            </Link>
+            <div className="flex h-10 items-center gap-2">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "link" }),
+                  "group px-2 text-primary/60 hover:text-primary hover:no-underline",
+                )}
+              >
+                Docs
+              </a>
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "link" }),
+                  "group hidden px-2 text-primary/60 hover:text-primary hover:no-underline md:flex",
+                )}
+              >
+                Changelog
+              </a>
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "link" }),
+                  "group hidden px-2 text-primary/60 hover:text-primary hover:no-underline md:flex",
+                )}
+              >
+                Github
+              </a>
+            </div>
+          </div>
+          <div className="flex h-10 items-center gap-2">
+            <Link to="/" className={cn(`${buttonVariants()} h-8 px-3`)}>
+              Log In
+            </Link>
+          </div>
+        </div>
+      </nav>
+      <div className="px-6">
+        <div className="mb-24 mt-10 flex flex-col gap-4">
+          <section className="flex flex-col items-center justify-center gap-4 p-16 md:p-24">
+            <h1 className="q text-center text-4xl font-bold leading-tight md:text-8xl  lg:leading-[1.1]">
+              Remix Cloudflare
+              <br />
+              Micro SaaS Stack
+            </h1>
+            <p className="max-w-screen-md text-center text-lg text-muted-foreground sm:text-xl">
+              Build at the speed of light.
+            </p>
+          </section>
+        </div>
+      </div>
     </div>
   );
 }
