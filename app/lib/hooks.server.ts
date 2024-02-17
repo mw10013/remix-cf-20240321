@@ -1,4 +1,5 @@
 import { Buffer } from "node:buffer";
+import { lemonSqueezySetup } from "@lemonsqueezy/lemonsqueezy.js";
 // import {
 //   createWorkersKVSessionStorage,
 //   SessionStorage,
@@ -32,6 +33,15 @@ export function hookEnv(env: unknown) {
   }
   assertEnv(env);
   return { env };
+}
+
+export function hookLmsqueezy({ LMSQUEEZY_API_KEY }: Env) {
+  lemonSqueezySetup({
+    apiKey: LMSQUEEZY_API_KEY,
+    onError(error) {
+      console.log(error);
+    },
+  });
 }
 
 // export function hookAuth({
