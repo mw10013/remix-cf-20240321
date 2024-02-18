@@ -15,7 +15,8 @@ import { SessionUser, users } from "~/lib/db/schema";
 
 export const envSchema = z.object({
   ENVIRONMENT: z.enum(["production", "preview", "development"]),
-  LMSQUEEZY_API_KEY: z.string().min(1),
+  LEMON_SQUEEZY_API_KEY: z.string().min(1),
+  LEMON_SQUEEZY_STORE_ID: z.string().min(1),
   //   SESSION_SECRET: z.string().min(1),
   //   TOTP_SECRET: z.string().min(1),
   //   RESEND_API_KEY: z.string().min(1),
@@ -35,9 +36,9 @@ export function hookEnv(env: unknown) {
   return { env };
 }
 
-export function hookLmsqueezy({ LMSQUEEZY_API_KEY }: Env) {
+export function hookLmsqueezy({ LEMON_SQUEEZY_API_KEY }: Env) {
   lemonSqueezySetup({
-    apiKey: LMSQUEEZY_API_KEY,
+    apiKey: LEMON_SQUEEZY_API_KEY,
     onError(error) {
       console.log(error);
     },
