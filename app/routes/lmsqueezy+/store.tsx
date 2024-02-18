@@ -1,5 +1,5 @@
 import { invariant } from "@epic-web/invariant";
-import { getStore, listStores } from "@lemonsqueezy/lemonsqueezy.js";
+import { getStore, Product } from "@lemonsqueezy/lemonsqueezy.js";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { eq } from "drizzle-orm";
@@ -14,9 +14,11 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const db = drizzle(env.D1, { schema });
   const store = await db.query.stores.findFirst({
     where: eq(schema.stores.id, env.LEMON_SQUEEZY_STORE_ID),
+    with: {
+      products: true,
+    },
   });
 
-  // const { statusCode, error, data } = await listStores();
   const { error, data } = await getStore(env.LEMON_SQUEEZY_STORE_ID, {
     include: ["products", "subscriptions"],
   });
@@ -42,6 +44,37 @@ export async function action({ context }: ActionFunctionArgs) {
       target: schema.stores.id,
       set: { name: data.data.attributes.name },
     });
+
+  console.log("data: %o", data);
+  console.log("data.included: %o", data.included);
+  invariant(data.included, "Missing included data");
+  for (const included of data.included) {
+    if (included.type !== "products") continue;
+    const productData = included as Product["data"];
+    await db
+      .insert(schema.products)
+      .values({
+        id: productData.id,
+        storeId: id,
+        name: productData.attributes.name,
+        description: productData.attributes.description,
+        status: productData.attributes.status,
+        price: productData.attributes.price,
+        priceFormatted: productData.attributes.price_formatted,
+        buyNowUrl: productData.attributes.buy_now_url,
+      })
+      .onConflictDoUpdate({
+        target: schema.products.id,
+        set: {
+          name: productData.attributes.name,
+          description: productData.attributes.description,
+          status: productData.attributes.status,
+          price: productData.attributes.price,
+          priceFormatted: productData.attributes.price_formatted,
+          buyNowUrl: productData.attributes.buy_now_url,
+        },
+      });
+  }
 
   return null;
 }
