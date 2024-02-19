@@ -16,7 +16,13 @@ import { SessionUser, users } from "~/lib/db/schema";
 export const envSchema = z.object({
   ENVIRONMENT: z.enum(["production", "preview", "development"]),
   LEMON_SQUEEZY_API_KEY: z.string().min(1),
-  LEMON_SQUEEZY_STORE_ID: z.string().min(1),
+  LEMON_SQUEEZY_STORE_ID: z
+    .string()
+    .min(1)
+    .transform((str) => parseInt(str, 10))
+    .refine((val) => !isNaN(val), {
+      message: "LEMON_SQUEEZY_STORE_ID must be a valid number",
+    }),
   //   SESSION_SECRET: z.string().min(1),
   //   TOTP_SECRET: z.string().min(1),
   //   RESEND_API_KEY: z.string().min(1),
