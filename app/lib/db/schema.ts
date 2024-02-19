@@ -31,12 +31,13 @@ export const storesRelations = relations(stores, ({ many }) => ({
 
 export const products = sqliteTable("products", {
   id: integer("id").primaryKey(),
-  storeId: text("store_id")
+  storeId: integer("store_id")
     .notNull()
     .references(() => stores.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description").notNull(),
   status: text("status").notNull(),
+  price: integer("price").notNull(),
   priceFormatted: text("price_formatted").notNull(),
   buyNowUrl: text("buy_now_url").notNull(),
 });
@@ -44,26 +45,52 @@ export const products = sqliteTable("products", {
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = typeof products.$inferInsert;
 
-export const productsRelations = relations(products, ({ one }) => ({
+export const productsRelations = relations(products, ({ one, many }) => ({
   store: one(stores, {
     fields: [products.storeId],
     references: [stores.id],
   }),
+  variants: many(variants),
 }));
 
 export const variants = sqliteTable("variants", {
   id: integer("id").primaryKey(),
-  productId: text("product_id")
+  productId: integer("product_id")
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  sort: integer("sort").notNull(),
+  status: text("status").notNull(),
 });
 
 export type Variant = typeof variants.$inferSelect;
 export type InsertVariant = typeof variants.$inferInsert;
 
-export const variantsRelations = relations(variants, ({ one }) => ({
+export const variantsRelations = relations(variants, ({ one, many }) => ({
   product: one(products, {
     fields: [variants.productId],
     references: [products.id],
+  }),
+  prices: many(prices),
+}));
+
+export const prices = sqliteTable("prices", {
+  id: integer("id").primaryKey(),
+  variantId: integer("variant_id")
+    .notNull()
+    .references(() => variants.id, { onDelete: "cascade" }),
+  unitPrice: integer("unit_price").notNull(),
+  renewalIntervalUnit: text("renewal_interval_unit").notNull(),
+  renewalIntervalQuantity: integer("renewal_interval_quantity").notNull(),
+});
+
+export type Price = typeof prices.$inferSelect;
+export type InsertPrice = typeof prices.$inferInsert;
+
+export const pricesRelations = relations(prices, ({ one }) => ({
+  variant: one(variants, {
+    fields: [prices.variantId],
+    references: [variants.id],
   }),
 }));

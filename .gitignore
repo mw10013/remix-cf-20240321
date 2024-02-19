@@ -21,3 +21,6 @@ wrangler.toml
 
 # Drizzle
 /drizzle
+
+#Vite
+vite.config.ts.timestamp-*
