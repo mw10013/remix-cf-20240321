@@ -23,6 +23,7 @@ export const envSchema = z.object({
     .refine((val) => !isNaN(val), {
       message: "LEMON_SQUEEZY_STORE_ID must be a valid number",
     }),
+  LEMON_SQUEEZY_WEBHOOK_SECRET: z.string().min(1),
   //   SESSION_SECRET: z.string().min(1),
   //   TOTP_SECRET: z.string().min(1),
   //   RESEND_API_KEY: z.string().min(1),
