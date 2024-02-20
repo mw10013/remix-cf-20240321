@@ -2,6 +2,7 @@ import { invariant } from "@epic-web/invariant";
 import {
   getStore,
   listProducts,
+  listSubscriptions,
   listVariants,
   Price,
   Product,
@@ -11,6 +12,12 @@ import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { Button } from "~/components/ui/button";
 import * as schema from "~/lib/db/schema";
 import { hookEnv, hookLmsqueezy } from "~/lib/hooks.server";
@@ -40,7 +47,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   });
 
   const { error: storeError, data: storeData } = await getStore(storeId, {
-    include: ["subscriptions"],
+    include: ["products", "orders", "subscriptions"],
   });
   if (storeError) throw storeError;
   const { error: productsError, data: productsData } = await listProducts({
@@ -54,7 +61,14 @@ export async function loader({ context }: LoaderFunctionArgs) {
   if (variantsError) throw variantsError;
   invariant(variantData, "No variants");
 
-  return { store, storeData, productsData, variantData };
+  const { error: subscriptionsError, data: subscriptionsData } =
+    await listSubscriptions({
+      filter: { storeId },
+      include: ["customer"],
+    });
+  if (subscriptionsError) throw subscriptionsError;
+
+  return { store, storeData, subscriptionsData, productsData, variantData };
 }
 
 export async function action({ context }: ActionFunctionArgs) {
@@ -148,15 +162,38 @@ export async function action({ context }: ActionFunctionArgs) {
 }
 
 export default function Route() {
-  const data = useLoaderData<typeof loader>();
+  const { store, subscriptionsData, ...data } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   return (
-    <div className="container p-6">
-      Lmsqueezy Store
+    <div className="container space-y-2 p-6">
       <Form method="post">
         <Button type="submit">Synchronize</Button>
       </Form>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        defaultValue="subscriptions"
+      >
+        <AccordionItem value="store">
+          <AccordionTrigger>Store</AccordionTrigger>
+          <AccordionContent>
+            <pre>{JSON.stringify(store, null, 2)}</pre>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="subscriptions">
+          <AccordionTrigger>Subscriptions</AccordionTrigger>
+          <AccordionContent>
+            <pre>{JSON.stringify(subscriptionsData, null, 2)}</pre>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="data">
+          <AccordionTrigger>Data</AccordionTrigger>
+          <AccordionContent>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       <pre>{JSON.stringify(actionData, null, 2)}</pre>
     </div>
   );
