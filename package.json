@@ -14,7 +14,7 @@
     "tail:prod": "wrangler pages deployment tail --project-name remix-cf --environment production",
     "tail:preview": "wrangler pages deployment tail --project-name remix-cf --environment preview",
     "tail:deploy": "wrangler pages deployment tail --project-name remix-cf",
-    "tunnel": "cloudflared tunnel --url http://localhost:8788",
+    "tunnel": "cloudflared tunnel --url http://localhost:5173",
     "drizzle:generate": "drizzle-kit generate:sqlite",
     "drizzle:up": "drizzle-kit up:sqlite",
     "drizzle:check": "drizzle-kit check:sqlite",

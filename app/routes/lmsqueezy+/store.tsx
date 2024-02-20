@@ -1,6 +1,7 @@
 import { invariant } from "@epic-web/invariant";
 import {
   getStore,
+  listCustomers,
   listProducts,
   listSubscriptions,
   listVariants,
@@ -30,6 +31,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const store = await db.query.stores.findFirst({
     where: eq(schema.stores.id, storeId),
     with: {
+      subscriptions: true,
       products: {
         where: (products, { eq }) => eq(products.status, "published"),
         orderBy: (products, { asc }) => [asc(products.price)],
@@ -68,7 +70,20 @@ export async function loader({ context }: LoaderFunctionArgs) {
     });
   if (subscriptionsError) throw subscriptionsError;
 
-  return { store, storeData, subscriptionsData, productsData, variantData };
+  const { error: customersError, data: customersData } = await listCustomers({
+    filter: { storeId },
+    include: ["subscriptions", "orders"],
+  });
+  if (customersError) throw customersError;
+
+  return {
+    store,
+    storeData,
+    subscriptionsData,
+    customersData,
+    productsData,
+    variantData,
+  };
 }
 
 export async function action({ context }: ActionFunctionArgs) {
@@ -78,7 +93,7 @@ export async function action({ context }: ActionFunctionArgs) {
   await db.delete(schema.stores);
   const storeId = env.LEMON_SQUEEZY_STORE_ID;
   const { error: storeError, data: storeData } = await getStore(storeId, {
-    include: ["products", "subscriptions"],
+    include: ["products", "subscriptions"], // seems not to include subscriptions
   });
   if (storeError) throw storeError;
   invariant(storeData, "Missing store");
@@ -158,11 +173,38 @@ export async function action({ context }: ActionFunctionArgs) {
     });
   }
 
+  const { error: subscriptionsError, data: subscriptionsData } =
+    await listSubscriptions({
+      filter: { storeId },
+      include: ["customer"],
+    });
+  if (subscriptionsError) throw subscriptionsError;
+  invariant(subscriptionsData, "Missing subscriptions data");
+  invariant(
+    subscriptionsData.meta.page.total <= subscriptionsData.meta.page.perPage,
+    "Too many subscriptions pages.",
+  );
+  for (const subscriptionData of subscriptionsData.data) {
+    const subscriptionId = parseInt(subscriptionData.id);
+    await db.insert(schema.subscriptions).values({
+      id: subscriptionId,
+      storeId: storeId,
+      customerId: subscriptionData.attributes.customer_id,
+      productId: subscriptionData.attributes.product_id,
+      variantId: subscriptionData.attributes.variant_id,
+      productName: subscriptionData.attributes.product_name,
+      variantName: subscriptionData.attributes.variant_name,
+      userName: subscriptionData.attributes.user_name,
+      userEmail: subscriptionData.attributes.user_email,
+      status: subscriptionData.attributes.status,
+    });
+  }
   return null;
 }
 
 export default function Route() {
-  const { store, subscriptionsData, ...data } = useLoaderData<typeof loader>();
+  const { store, subscriptionsData, customersData, ...data } =
+    useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   return (
     <div className="container space-y-2 p-6">
@@ -173,12 +215,18 @@ export default function Route() {
         type="single"
         collapsible
         className="w-full"
-        defaultValue="subscriptions"
+        defaultValue="customers"
       >
         <AccordionItem value="store">
           <AccordionTrigger>Store</AccordionTrigger>
           <AccordionContent>
             <pre>{JSON.stringify(store, null, 2)}</pre>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="customers">
+          <AccordionTrigger>Customers</AccordionTrigger>
+          <AccordionContent>
+            <pre>{JSON.stringify(customersData, null, 2)}</pre>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="subscriptions">
