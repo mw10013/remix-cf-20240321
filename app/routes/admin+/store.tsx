@@ -197,6 +197,8 @@ export async function action({ context }: ActionFunctionArgs) {
       userName: subscriptionData.attributes.user_name,
       userEmail: subscriptionData.attributes.user_email,
       status: subscriptionData.attributes.status,
+      createdAt: new Date(subscriptionData.attributes.created_at),
+      updatedAt: new Date(subscriptionData.attributes.updated_at),
     });
   }
   return null;
@@ -215,7 +217,7 @@ export default function Route() {
         type="single"
         collapsible
         className="w-full"
-        defaultValue="customers"
+        defaultValue="store"
       >
         <AccordionItem value="store">
           <AccordionTrigger>Store</AccordionTrigger>

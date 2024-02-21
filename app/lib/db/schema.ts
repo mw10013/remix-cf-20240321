@@ -109,6 +109,8 @@ export const subscriptions = sqliteTable("subscriptions", {
   userName: text("user_name").notNull(),
   userEmail: text("user_email").notNull(),
   status: text("status").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 });
 
 export type Subscription = typeof subscriptions.$inferSelect;
