@@ -2,6 +2,7 @@ import * as crypto from "node:crypto";
 import { invariant } from "@epic-web/invariant";
 import { Order, Subscription, Webhook } from "@lemonsqueezy/lemonsqueezy.js";
 import { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { eq } from "drizzle-orm";
 import { drizzle, DrizzleD1Database } from "drizzle-orm/d1";
 import * as schema from "~/lib/db/schema";
 import { hookEnv } from "~/lib/hooks.server";
@@ -90,6 +91,19 @@ async function handleSubscriptionEvent({
             status: attributes.status,
             updatedAt: new Date(attributes.updated_at),
           },
+        });
+      await db
+        .insert(schema.users)
+        .values({
+          email: attributes.user_email,
+          name: attributes.user_name,
+        })
+        .onConflictDoUpdate({
+          target: schema.users.email,
+          set: {
+            name: attributes.user_name,
+          },
+          where: eq(schema.users.email, attributes.user_email),
         });
       break;
   }

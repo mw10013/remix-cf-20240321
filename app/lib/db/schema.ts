@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 export const users = sqliteTable("users", {
   id: text("id").primaryKey().$default(nanoid),
   email: text("email").notNull().unique(),
+  name: text("name").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(unixepoch())`),

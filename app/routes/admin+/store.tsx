@@ -48,6 +48,8 @@ export async function loader({ context }: LoaderFunctionArgs) {
     },
   });
 
+  const users = await db.query.users.findMany();
+
   const { error: storeError, data: storeData } = await getStore(storeId, {
     include: ["products", "orders", "subscriptions"],
   });
@@ -78,6 +80,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
   return {
     store,
+    users,
     storeData,
     subscriptionsData,
     customersData,
@@ -205,7 +208,7 @@ export async function action({ context }: ActionFunctionArgs) {
 }
 
 export default function Route() {
-  const { store, subscriptionsData, customersData, ...data } =
+  const { store, users, subscriptionsData, customersData, ...data } =
     useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   return (
@@ -223,6 +226,12 @@ export default function Route() {
           <AccordionTrigger>Store</AccordionTrigger>
           <AccordionContent>
             <pre>{JSON.stringify(store, null, 2)}</pre>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="users">
+          <AccordionTrigger>Users</AccordionTrigger>
+          <AccordionContent>
+            <pre>{JSON.stringify(users, null, 2)}</pre>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="customers">
