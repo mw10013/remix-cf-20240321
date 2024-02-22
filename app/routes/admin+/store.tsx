@@ -194,7 +194,6 @@ export async function action({ context }: ActionFunctionArgs) {
     "Too many customers pages.",
   );
   for (const customerData of customersData.data) {
-    const customerId = parseInt(customerData.id);
     await db
       .insert(schema.users)
       .values({
