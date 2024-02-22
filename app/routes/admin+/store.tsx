@@ -33,11 +33,9 @@ export async function loader({ context }: LoaderFunctionArgs) {
     with: {
       subscriptions: true,
       products: {
-        where: (products, { eq }) => eq(products.status, "published"),
         orderBy: (products, { asc }) => [asc(products.price)],
         with: {
           variants: {
-            where: (variants, { eq }) => eq(variants.status, "published"),
             orderBy: (variants, { asc }) => [asc(variants.sort)],
             with: {
               prices: true,
@@ -108,6 +106,13 @@ export async function action({ context }: ActionFunctionArgs) {
   for (const included of storeData.included) {
     if (included.type !== "products") continue;
     const productData = included as Product["data"];
+    if (productData.attributes.status !== "published") {
+      console.log("Skipping unpublished product:", {
+        id: productData.id,
+        name: productData.attributes.name,
+      });
+      continue;
+    }
     const productId = parseInt(productData.id);
     await db.insert(schema.products).values({
       id: productId,
@@ -126,6 +131,9 @@ export async function action({ context }: ActionFunctionArgs) {
   }
 
   const { error: variantListError, data: variantList } = await listVariants({
+    filter: {
+      status: "published",
+    },
     include: ["price-model"],
   });
   if (variantListError) throw variantListError;
@@ -174,6 +182,31 @@ export async function action({ context }: ActionFunctionArgs) {
       renewalIntervalUnit: priceData.attributes.renewal_interval_unit,
       renewalIntervalQuantity: priceData.attributes.renewal_interval_quantity,
     });
+  }
+
+  const { error: customersError, data: customersData } = await listCustomers({
+    filter: { storeId },
+  });
+  if (customersError) throw customersError;
+  invariant(customersData, "Missing customers data");
+  invariant(
+    customersData.meta.page.total <= customersData.meta.page.perPage,
+    "Too many customers pages.",
+  );
+  for (const customerData of customersData.data) {
+    const customerId = parseInt(customerData.id);
+    await db
+      .insert(schema.users)
+      .values({
+        email: customerData.attributes.email,
+        name: customerData.attributes.name,
+      })
+      .onConflictDoUpdate({
+        target: schema.users.email,
+        set: {
+          name: customerData.attributes.name,
+        },
+      });
   }
 
   const { error: subscriptionsError, data: subscriptionsData } =
